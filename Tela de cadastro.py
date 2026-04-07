@@ -1,7 +1,7 @@
 import customtkinter
 
 # Aparência
-customtkinter.set_appearance_mode("dark")
+customtkinter.set_appearance_mode("white")
 customtkinter.set_default_color_theme("dark-blue")
 
 # Janela principal (Tela inicial)
@@ -9,6 +9,27 @@ root = customtkinter.CTk()
 root.title("Pizza Loop")
 root.geometry("700x500")
 
+# =========================
+# FUNÇÃO ABRIR TELA APÓS LOGIN
+# =========================
+def abrir_tela_inicial():
+    janela_sistema = customtkinter.CTkToplevel(root)
+    
+    # Pega a largura e altura do monitor do usuário
+    largura_monitor = janela_sistema.winfo_screenwidth()
+    altura_monitor = janela_sistema.winfo_screenheight()
+    
+    # Define o tamanho da janela para o tamanho total do monitor
+    janela_sistema.geometry(f"{largura_monitor}x{altura_monitor}+0+0")
+    
+    # Opcional: Maximiza a janela (Funciona melhor no Windows)
+    janela_sistema.state("zoomed")
+    
+    janela_sistema.title("Pizza Loop - Sistema")
+    janela_sistema.attributes("-topmost", True)
+
+    titulo = customtkinter.CTkLabel(janela_sistema, text="Bem-vindo ao Sistema! 🍕", font=("Arial", 40, "bold"))
+    titulo.pack(expand=True) # expand=True centraliza no meio da tela cheia
 
 # =========================
 # FUNÇÃO ABRIR LOGIN
@@ -17,7 +38,8 @@ def abrir_login():
     root.withdraw() # Esconde a tela inicial
 
     janela_login = customtkinter.CTkToplevel(root)
-    janela_login.geometry("700x500")
+    janela_login.geometry("700x500")    
+    
     janela_login.title("Login")
     janela_login.attributes("-topmost", True)
     
@@ -40,8 +62,12 @@ def abrir_login():
     checkbox = customtkinter.CTkCheckBox(janela_login, text="Lembrar login")
     checkbox.pack(pady=10)
 
-    # Botão login
-    botao_login = customtkinter.CTkButton(janela_login, text="Entrar")
+    # Botão login - AGORA CHAMA A FUNÇÃO DEFINIDA NO TOPO
+    def acao_login():
+        janela_login.withdraw() # Esconde o login ao entrar
+        abrir_tela_inicial()
+
+    botao_login = customtkinter.CTkButton(janela_login, text="Entrar", command=acao_login)
     botao_login.pack(pady=10)
 
     # Botão cadastro
@@ -60,8 +86,7 @@ def abrir_login():
         root.deiconify() # Mostra a tela inicial de volta
 
     botao_voltar = customtkinter.CTkButton(janela_login, text="Voltar", command=voltar_inicio)
-    botao_voltar.pack(pady=10)
-
+    botao_voltar.pack(pady=10)  
 
 # =========================
 # FUNÇÃO ABRIR CADASTRO
@@ -112,8 +137,5 @@ subtitulo = customtkinter.CTkLabel(root, text="Bem-vindo ao sistema da pizzaria"
 subtitulo.pack(pady=10)
 
 botao_entrar = customtkinter.CTkButton(root, text="Entrar", command=abrir_login)
-botao_entrar.pack(pady=30)
-
-
-# Loop principal
+botao_entrar.pack(pady=30)  
 root.mainloop()
